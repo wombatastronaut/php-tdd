@@ -14,11 +14,39 @@ class ReceiptTest extends TestCase
         $this->receipt = new Receipt();
     }
 
-    /** @test */
-    public function it_can_get_the_total()
+    /** 
+     * @test
+     * 
+     * @dataProvider getTheTotalProvider
+     */
+    public function it_can_get_the_total($items, $expected)
     {
-        $expected = 15;
-        $actual = $this->receipt->getTotal([2, 2, 3, 4, 5]);
+        $actual = $this->receipt->getTotal($items);
+
+        $this->assertEquals(
+            $expected,
+            $actual,
+            "It should return {$expected}"
+        );
+    }
+
+    public function getTheTotalProvider()
+    {
+        return [
+            [[1, 2, 3, 4, 5], 15],
+            [[1, 3, 4, 4, 9], 21],
+            [[2, 3, 4, 3, 3], 15]
+        ];
+    }
+
+    /** @test */
+    public function it_can_get_the_tax()
+    {
+        $expected = 1;
+        $tax = 0.10;
+        $amount = 10;
+
+        $actual = $this->receipt->getTax($amount, $tax);
 
         $this->assertEquals(
             $expected,
