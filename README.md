@@ -1,2 +1,2 @@
 # php-tdd
-A simple demo of tdd
+A simple tdd demo
