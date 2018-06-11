@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-require __DIR__ . '/../vendor/autoload.php';
+require dirname(dirname(__FILE__)) . '/vendor' . '/autoload.php';
 
 use PHPUnit\Framework\TestCase;
 use App\Receipt;
@@ -21,37 +21,51 @@ class ReceiptTest extends TestCase
      */
     public function it_can_get_the_total($items, $expected)
     {
-        $actual = $this->receipt->getTotal($items);
+        $coupon = null;
+        $actual = $this->receipt->getTotal($items, $coupon);
 
         $this->assertEquals(
             $expected,
             $actual,
             "It should return {$expected}"
         );
+    }
+
+    /** 
+     * @test
+     */
+    public function it_can_get_the_total_and_coupon_with_exception()
+    {
+        $items = [1, 2, 3, 4, 5];
+        $coupon = 1.20;
+
+        $this->expectException('BadMethodCallException');
+        $this->receipt->getTotal($items, $coupon);
+
     }
 
     public function getTheTotalProvider()
     {
         return [
             [[1, 2, 3, 4, 5], 15],
-            [[1, 3, 4, 4, 9], 21],
-            [[2, 3, 4, 3, 3], 15]
+            [[0, 5, 7, 2, 5], 19],
+            [[8, 2, 3, 1, 7], 21]
         ];
     }
 
     /** @test */
     public function it_can_get_the_tax()
     {
-        $expected = 1;
+        $amount = 10.00;
         $tax = 0.10;
-        $amount = 10;
 
         $actual = $this->receipt->getTax($amount, $tax);
 
-        $this->assertEquals(
-            $expected,
-            $actual,
-            "It should return {$expected}"
-        );
+        $this->assertEquals(1.00, $actual);
+    }
+
+    public function tearDown()
+    {
+        unset($this->receipt);
     }
 }
