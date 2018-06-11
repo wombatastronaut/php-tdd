@@ -31,9 +31,7 @@ class ReceiptTest extends TestCase
         );
     }
 
-    /** 
-     * @test
-     */
+    /** @test */
     public function it_can_get_the_total_and_coupon_with_exception()
     {
         $items = [1, 2, 3, 4, 5];
